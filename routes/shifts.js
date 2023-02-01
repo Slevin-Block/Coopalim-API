@@ -1,8 +1,9 @@
 import express from 'express';
-import { Shift } from '../controllers/Shift.js';
+import { Participate, Shift } from '../controllers/Shift.js';
 import { AuthenticateToken } from '../middlewares/auth.js';
 
-export const shifts = express.Router({mergeParams: true});
+export const shiftsRouter = express.Router({mergeParams: true});
 
-shifts.route('/')
+shiftsRouter.route('/')
     .get(AuthenticateToken, Shift)
+    .post(AuthenticateToken, Participate)

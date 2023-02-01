@@ -8,7 +8,7 @@ export const User =  mongoose.model("users",
             id :            {type: String},
             login :         {type: String, required : [true, "Login needed"]},
             password :      {type: String, required : [true, "Password needed"]},
-            passwordVis :   {type: String},
+            /* passwordVis :   {type: String}, */
 
             firstname :     {type: String, required : [true, "Firstname needed"]},
             lastname :      {type: String, required : [true, "Lastname needed"]},
@@ -16,7 +16,7 @@ export const User =  mongoose.model("users",
             email :         {type: String, required : [true, "Email needed"]},
             phone :         {type: String,  required : [true, "Phone needed"]},
 
-            rules :         [],
+            rule :         {type: String, required : [true, "Rule needed"]},
             attributions :  [],
             isAutonomous :  {type: Boolean, default: false},
             refreshTokenFamily : [String],

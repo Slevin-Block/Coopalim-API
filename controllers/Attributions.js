@@ -3,7 +3,7 @@ import { Attribution } from "../models/attributionModel.js"
 import { validateObject } from "../utils/functions.js"
 
 export const NewAttribution = async (req, res) => {
-    console.log(req.body)
+
     const newAttribution = new Attribution({...req.body})
     try{
         await newAttribution.save()
@@ -21,8 +21,8 @@ export const ReadAttribution = async(req, res) => {
     try{
         query = req.query?.id ? {_id : mongoose.Types.ObjectId(req.query.id)} : {}
     }catch(err){
-    console.log(err)
-         return res.status(400).send({msg : "Invalid id"})
+        console.log(err)
+        return res.status(400).send({msg : "Invalid id"})
     }
     
     try{
@@ -39,7 +39,7 @@ export const EditAttribution = (req, res) => {
 
     // Filter bad body
     if(!req.body?.id) return res.status(400).send({msg : "Bad query"})
-    if (!validateObject(req.body, ['id', 'label', 'description'])) return res.status(400).send({msg : "Bad query"})
+    if (!validateObject(req.body, ['id', 'label', 'description', 'icon'])) return res.status(400).send({msg : "Bad query"})
 
     const toModify = {...req.body}
     delete toModify.id
@@ -57,7 +57,6 @@ export const EditAttribution = (req, res) => {
 
 export const DeleteAttribution = (req, res) => {
     if (!req.params.id) return res.status(400).send({msg : "Bad query"})
-    //console.log(req.params.id)
     try{
         Attribution.findByIdAndDelete(req.params.id, (err, doc) => {
             if (err || !doc) return res.status(404).send({msg : "This attribution doesn't exist"})

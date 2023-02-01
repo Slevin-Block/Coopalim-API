@@ -6,7 +6,7 @@ import { AuthenticateAdmin, AuthenticateToken } from '../middlewares/auth.js';
 export const attributionRouter = express.Router();
 
 attributionRouter.route("/")
-    .get(AuthenticateToken, ReadAttribution)
+    .get(ReadAttribution)
     .post(AuthenticateToken, AuthenticateAdmin, NewAttribution)
     .put(AuthenticateToken, AuthenticateAdmin, EditAttribution)
 

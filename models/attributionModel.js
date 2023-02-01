@@ -7,6 +7,7 @@ export const Attribution =  mongoose.model("attributions",
         {
             label :         {type: String, required : [true, "Label needed"]},
             description :   {type: String},
+            icon :          {type: String},
         },
         {
             timestamps: true

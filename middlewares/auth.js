@@ -16,7 +16,6 @@ export const AuthenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     let user;
-
     // Stop if accessToken doesn't existe
     if (!token) return res.status(400).send({msg : 'Missing token'});
 
@@ -45,7 +44,7 @@ export const AuthenticateToken = (req, res, next) => {
  * @param {*} next Next function 
  */
 export const AuthenticateUser = async (req, res, next) => {
-    
+
     // Resource audit
     if (!req.body?.login || !req.body?.password) return res.status(400).send({msg : 'Incomplete resources'});
 
@@ -79,7 +78,10 @@ export const AuthenticateAdmin = async (req, res, next) => {
     }catch(err){
         res.status(500).send({msg : "DB error"})
     }
-
-    if (user?.rules.includes("admin")) next()
+    
+    // Admin id
+    if (user?.rule === "63b85947008e71f329ecd4bc"){
+        next()
+    }
     else res.status(403).send({msg : "Isn't admin"})
 }

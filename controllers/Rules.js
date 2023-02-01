@@ -3,11 +3,10 @@ import mongoose from "mongoose"
 import { validateObject } from "../utils/functions.js"
 
 export const NewRule = async (req, res) => {
-    console.log(req.body)
     const newRule = new Rule({...req.body})
     try{
         await newRule.save()
-        return res.status(200).send(newRule)
+        return res.status(201).send(newRule)
     }catch(err){
         res.status(500).send("DB error")
     }
@@ -57,7 +56,6 @@ export const EditRule = (req, res) => {
 
 export const DeleteRule = (req, res) => {
     if (!req.params.id) return res.status(400).send({msg : "Bad query"})
-    console.log(req.params.id)
     try{
         Rule.findByIdAndDelete(req.params.id, (err, doc) => {
             if (err || !doc) return res.status(404).send({msg : "This rule doesn't exist"})

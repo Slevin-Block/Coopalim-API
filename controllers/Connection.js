@@ -1,11 +1,9 @@
-import bcrypt from "bcrypt";
-
 import { User } from "../models/userModel.js";
 import { objectFilter } from "../utils/functions.js";
 import { generateToken, cleanTokenFamily } from "../utils/JWT.js";
 
 // Array containing authorizated informations to send to Front
-const authorizedFields = ['id', 'login', 'firstname', 'lastname'];
+export const authorizedFields = ['id', 'login', 'firstname', 'lastname', 'rule'];
 
 /**
  * Connection with user id obtained by Login + Password, or RefreshToken
@@ -17,14 +15,12 @@ const authorizedFields = ['id', 'login', 'firstname', 'lastname'];
 export const Login = async (req, res) => {
     // Variables creation
     let user = req?.isFind ? req.user : {id : req.user.id};
-    console.log("LOGIN : ", user.id);
     let objectResponse = {}
 
     try{
 
         // Find existing user
         if (!req?.isFind){
-            console.log("Search")
             user = await User.findById(user.id);
             if(!user) res.status(404).send({msg : "User doesn't exist"})
         }
@@ -53,41 +49,7 @@ export const Login = async (req, res) => {
         .send(objectResponse);
 }
 
-/**
- * Create new user with informations store in req.body 
- * @param {*} req Request
- * @param {*} res Response
- * @returns Call Login Controller after the creation of the new user
- */
-export const Signup = async (req, res) => {
 
-    // Variables creation
-    let hashedPassword;
-    const salt = await bcrypt.genSalt(10);
-
-    try {
-        // Generate hashed password
-        hashedPassword = bcrypt.hashSync(req.body.password, salt);
-    }catch(err){
-        console.log(err);
-        res.status(500).send({msg : "Error bcrypt"});
-    }
-    // Create new user compleded instance
-    const newUser = new User({... req.body, password : hashedPassword, passwordVis : req.body.password});
-    newUser.id = newUser._id;
-
-    // Save new user in DB
-    try{
-        await newUser.save();
-    }catch(err){
-        res.status(500).send({msg : "Error DB"});
-        return;
-    }
-    res.status(201).send({msg : "user create"});
-    // Call Login controller to Login automatically the new user
-    /* req.user = newUser;
-    Login(req, res); */
-}
 
 /**
  * Claim new tokens after access token validation
@@ -145,7 +107,6 @@ export const Authorization = async (req, res) => {
 export const Logout = async (req,res) => {
     // Variables creation
     let user = {id : req.user.id};
-    console.log("LOGOUT : " + user.id);
     const refreshToken = req.oldRefreshToken;
     try{
         // Find user match with user id

@@ -3,12 +3,12 @@ import { ReadRules, NewRule, EditRule, DeleteRule } from '../controllers/Rules.j
 import { AuthenticateAdmin, AuthenticateToken } from '../middlewares/auth.js';
 
 
-export const rulesRouter = express.Router();
+export const ruleRouter = express.Router();
 
-rulesRouter.route("/")
-    .get(AuthenticateToken, ReadRules)
+ruleRouter.route("/")
+    .get(ReadRules)
     .post(AuthenticateToken, AuthenticateAdmin, NewRule)
     .put(AuthenticateToken, AuthenticateAdmin, EditRule)
 
-rulesRouter.route("/:id")
+ruleRouter.route("/:id")
     .delete(AuthenticateToken, AuthenticateAdmin, DeleteRule)
